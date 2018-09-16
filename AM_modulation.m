@@ -1,6 +1,6 @@
 clear all
 clc
-%Modulacion AM
+%Modulacion 
 %Comunicaciones Electrica 1 - II 2018
 
  
@@ -73,7 +73,7 @@ grid on
 title('Onda Portadora');
 
 
-subplot(4,1,2);  %Señal de informacion
+subplot(4,1,2);  %SeÃ±al de informacion
 
 if Selec==1
     plot(t,m),xlabel('tiempo(s)'),ylabel('Amplitud (V)');
@@ -92,7 +92,7 @@ end
 
 
 % Grafica de senal modulada
-subplot(4,1,3);  %Señal de informacion
+subplot(4,1,3);  %SeÃ±al de informacion
 plot(t,Modulada),xlabel('tiempo(s)'),ylabel('Amplitud (V)');
 grid on
 title ('Onda de Modulada');
