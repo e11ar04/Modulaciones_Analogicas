@@ -14,7 +14,7 @@ t = 0:1/Fre:2;
 %Se pregunta al usuario por los parametros de la onda de informacion 
 fprintf('\n Se debe definir los parametros de la onda de informacion\n ')
 Ai = input('\nIngrese la amplitud de la onda de informacion:'); 
-f_m = input('\nFrecuencia del la onda de informacion: ');
+f_m = input('\nFrecuencia de la onda de informacion: ');
 fprintf('\nSeleccione entre las 4 funciones precargadas para determinar la onda de informacion:\n');
 fprintf('\n1-Senoidal \n2-Sawtooth \n3-Pulsos \n');
 Selec = input('\nSu eleccion es: ');
@@ -89,14 +89,23 @@ elseif Selec_2 ==3
     Portadora = A_c*cos(2*pi*t*F_c); % Funcion de portador
     
     Modulada = PM(m,Kp,F_c,A_c,t); %Funcion de modulacion de fase
-    
+
     %Demod
     phasedev = Kp.*Ai;
-    d = pmdemod(Modulada,F_c,Fre,phasedev);
-    d2 = conv(d,butter(30,F_c/(Fre/2)));
-    rec = d2(25:10000);
+
+% DIENTE DE SIERRA    
+    d2 = conv(Modulada,butter(10,F_c/(Fre/2)));
+    rec = d2(50:10000);
     ampl=rec*(((min(m)-max(m))/2)/((min(rec)-max(rec))/2));
-    d1=ampl;
+    d=ampl;
+    d1 = pmdemod(d,F_c,Fre,phasedev);
+
+% PULSOS
+%     d = pmdemod(Modulada,F_c,Fre,phasedev);
+%     d2 = conv(d,butter(10,F_c/(Fre/2)));
+%     rec = d2(25:10000);
+%     ampl=rec*(((min(m)-max(m))/2)/((min(rec)-max(rec))/2));
+%     d1=ampl;
     
 elseif Selec_2 ==4
     Kf= input('Defina sensibilidad del modulador de frecuencia: ');
@@ -133,17 +142,22 @@ title('Onda Portadora');
 
 
 subplot(5,1,2);  %Señal de informacion
+ymin=-Ai-0.2;
+ymax=Ai+0.2;
 
 if Selec==1
     plot(t(1:F_c),m(1:F_c)),xlabel('tiempo(s)'),ylabel('Amplitud (V)');
+    ylim([ymin ymax]);
     grid on
     title ('Onda de Informacion');
 elseif Selec==2
     plot(t(1:F_c),m(1:F_c)),xlabel('tiempo(s)'),ylabel('Amplitud (V)');
+    ylim([ymin ymax]);
     grid on
     title ('Onda de Informacion');
 elseif Selec==3
     plot(t(1:F_c),m(1:F_c)),xlabel('tiempo(s)'),ylabel('Amplitud (V)');
+    ylim([ymin ymax]);
     grid on
     title ('Onda de Informacion');
 end
@@ -165,7 +179,8 @@ title ('Analisis Espectral');
 
 
 % Gráfica de onda demodulada
-subplot(5,1,5), plot(t(1:F_c),d1(1:F_c)),xlabel('tiempo (s)'),ylabel('Demodulada');
+subplot(5,1,5), plot(t(1:F_c)-0.002,d1(1:F_c)),xlabel('tiempo (s)'),ylabel('Demodulada');
+xlim([0 0.035]);
 grid on
 title ('Onda Demodulada');
 
