@@ -92,20 +92,7 @@ elseif Selec_2 ==3
 
     %Demod
     phasedev = Kp.*Ai;
-
-% DIENTE DE SIERRA    
-    d2 = conv(Modulada,butter(10,F_c/(Fre/2)));
-    rec = d2(50:10000);
-    ampl=rec*(((min(m)-max(m))/2)/((min(rec)-max(rec))/2));
-    d=ampl;
-    d1 = pmdemod(d,F_c,Fre,phasedev);
-
-% PULSOS
-%     d = pmdemod(Modulada,F_c,Fre,phasedev);
-%     d2 = conv(d,butter(10,F_c/(Fre/2)));
-%     rec = d2(25:10000);
-%     ampl=rec*(((min(m)-max(m))/2)/((min(rec)-max(rec))/2));
-%     d1=ampl;
+    d1 = pmdemod(Modulada,F_c,Fre,phasedev);
     
 elseif Selec_2 ==4
     Kf= input('Defina sensibilidad del modulador de frecuencia: ');
@@ -116,15 +103,27 @@ elseif Selec_2 ==4
     A_c = input('Defina amplitud de la onda portadora: ');
     Portadora = A_c*cos(2*pi*t*F_c); % Funcion de portador
     
-    Modulada = FM(m,Kf,F_c,A_c,t); %Funcion de modulacion de frecuencia
+    %Modulada = FM(m,Kf,F_c,A_c,t); %Funcion de modulacion de frecuencia
+    
+    freqdev=Kf.*Ai;
+    Modulada = fmmod(m,F_c,Fre,freqdev);
     
     %Demod
-    freqdev=Kf.*Ai;
-    d = fmdemod(Modulada,F_c,Fre,freqdev);
-    d2 = conv(d,butter(30,F_c/(Fre/2)));
-    rec = d2(25:10000);
-    ampl=rec*(((min(m)-max(m))/2)/((min(rec)-max(rec))/2));
-    d1=ampl;
+
+    %d2 = conv(Modulada,butter(10,F_c/(Fre/2)));
+    %rec = d2(25:10000);     
+    %ampl=rec*(((min(m)-max(m))/2)/((min(rec)-max(rec))/2));
+    %ampl=d2*(((min(m)-max(m))/2)/((min(d2)-max(d2))/2));
+    %d=ampl;
+    %d1 = fmdemod(d,F_c,Fre,freqdev);
+    d1 = fmdemod(Modulada,F_c,Fre,freqdev);
+    
+    %freqdev=Kf.*Ai;
+%     d = fmdemod(Modulada,F_c,Fre,freqdev);
+%     d2 = conv(d,butter(3,F_c/(Fre/2)));
+%     rec = d2(25:10000);
+%     ampl=rec*(((min(m)-max(m))/2)/((min(rec)-max(rec))/2));
+%     d1=ampl;
     
 end
 
@@ -179,8 +178,9 @@ title ('Analisis Espectral');
 
 
 % Gráfica de onda demodulada
-subplot(5,1,5), plot(t(1:F_c)-0.002,d1(1:F_c)),xlabel('tiempo (s)'),ylabel('Demodulada');
-xlim([0 0.035]);
+% subplot(5,1,5), plot(t(1:F_c)-0.002,d1(1:F_c)),xlabel('tiempo (s)'),ylabel('Demodulada');
+subplot(5,1,5), plot(t(1:F_c),d1(1:F_c)),xlabel('tiempo (s)'),ylabel('Demodulada');
+xlim([0 0.03]);
 grid on
 title ('Onda Demodulada');
 
