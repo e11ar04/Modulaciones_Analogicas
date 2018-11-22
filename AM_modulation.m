@@ -110,20 +110,22 @@ elseif Selec_2 ==4
     
     %Demod
 
-    %d2 = conv(Modulada,butter(10,F_c/(Fre/2)));
-    %rec = d2(25:10000);     
-    %ampl=rec*(((min(m)-max(m))/2)/((min(rec)-max(rec))/2));
-    %ampl=d2*(((min(m)-max(m))/2)/((min(d2)-max(d2))/2));
-    %d=ampl;
-    %d1 = fmdemod(d,F_c,Fre,freqdev);
-    d1 = fmdemod(Modulada,F_c,Fre,freqdev);
+%     d2 = conv(Modulada,butter(10,F_c/(Fre/2)));
+%     rec = d2(25:10000);     
+%     ampl=rec*(((min(m)-max(m))/2)/((min(rec)-max(rec))/2));
+%     ampl=d2*(((min(m)-max(m))/2)/((min(d2)-max(d2))/2));
+%     d=ampl;
+%     d1 = fmdemod(d,F_c,Fre,freqdev);
+    %d1 = fmdemod(Modulada,F_c,Fre,freqdev);
     
     %freqdev=Kf.*Ai;
-%     d = fmdemod(Modulada,F_c,Fre,freqdev);
+    d = fmdemod(Modulada,F_c,Fre,freqdev);
 %     d2 = conv(d,butter(3,F_c/(Fre/2)));
 %     rec = d2(25:10000);
-%     ampl=rec*(((min(m)-max(m))/2)/((min(rec)-max(rec))/2));
-%     d1=ampl;
+   
+    rec = d(25:10000);
+    ampl=rec*(((min(m)-max(m))/2)/((min(rec)-max(rec))/2));
+    d1=ampl;
     
 end
 
@@ -179,8 +181,10 @@ title ('Analisis Espectral');
 
 % Gráfica de onda demodulada
 % subplot(5,1,5), plot(t(1:F_c)-0.002,d1(1:F_c)),xlabel('tiempo (s)'),ylabel('Demodulada');
-subplot(5,1,5), plot(t(1:F_c),d1(1:F_c)),xlabel('tiempo (s)'),ylabel('Demodulada');
-xlim([0 0.03]);
+%subplot(5,1,5), plot(t(1:F_c),d1(1:F_c)),xlabel('tiempo (s)'),ylabel('Demodulada');
+subplot(5,1,5), plot(t(1:F_c),d1(1:F_c)),xlabel('tiempo (s)'),ylabel('Demodulada'); %FM
+
+%xlim([0 0.03]);
 grid on
 title ('Onda Demodulada');
 
